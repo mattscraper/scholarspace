@@ -1,0 +1,88 @@
+home {
+  font-family: "Jost", sans-serif;
+  color: #fff;
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+  padding: 20px;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: url("https://your-image-url.jpg") no-repeat center center/cover; /* Update this URL */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero p {
+  font-size: 1.5em;
+  margin-bottom: 30px;
+}
+
+.features,
+.how-it-works,
+.testimonials,
+.get-started {
+  margin: 40px 0;
+  padding: 30px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.features h2,
+.how-it-works h2,
+.testimonials h2,
+.get-started h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.features li {
+  margin: 15px 0;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.testimonials blockquote {
+  margin: 20px;
+  padding: 15px;
+  border-left: 4px solid #fff;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+.get-started {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.cta-button {
+  padding: 15px 30px;
+  font-size: 1.5em;
+  background: #573b8a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 20px;
+}
+
+.cta-button:hover {
+  background: #6d44b8;
+}
