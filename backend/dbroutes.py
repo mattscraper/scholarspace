@@ -1,6 +1,6 @@
 from app import app,db
 from flask import request, jsonify
-from models import Room,User
+from models import Room,User,user_room
 from app import bcrypt
 
 
@@ -142,10 +142,52 @@ def add_room():
         return jsonify({"error":str(e)}),500
     
 
+@app.route("/api/joinroom",methods=["POST"])
+def join_room():
+    data = request.json
+    room_id= data.get("id")
+    user_id = data.get("userId")
+    room = Room.query.filter_by(id=room_id).first()
 
-@app.route('/api/viewrooms', methods=["GET"])
-def view_rooms():
-    pass
+    if not room:
+        return jsonify({"error":"Room does not exist"}),400
+
+    user = User.query.filter_by(id=user_id).first()
+
+    if user not in room.users:
+        room.users.append(user)
+
+    if room not in user.rooms:
+        user.rooms.append(room)
+
+    db.session.commit()
+
+
+
+    return jsonify({
+        "msg":"Success!",
+        'roomName':room.name}),201
+    
+@app.route('/api/view/<int:user_id>/rooms', methods=["GET"])
+def view_rooms(user_id):
+    user = User.query.get(user_id)
+    
+
+    if not user:
+        return jsonify({"error":"User not found"}),404
+
+    rooms = user.rooms
+    room_data = [{
+        "id":room.id,
+        "name":room.name,
+        "description":room.description
+    } for room in rooms]
+    return jsonify({
+        "rooms":room_data
+    }),200
+
+
+    
 
 
 
