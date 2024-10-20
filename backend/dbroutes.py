@@ -1,5 +1,5 @@
 from app import app,db
-from flask import request, jsonify
+from flask import request, jsonify,session
 from models import Room,User,user_room
 from app import bcrypt
 
@@ -182,12 +182,11 @@ def view_rooms(user_id):
         "name":room.name,
         "description":room.description
     } for room in rooms]
+
     return jsonify({
-        "rooms":room_data
+        "rooms":room_data 
     }),200
 
 
     
-
-
 

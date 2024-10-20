@@ -1,79 +1,141 @@
 import React from "react";
-import "./home.css";
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  Stack,
+  Flex,
+  Container,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="home">
-      <section className="hero">
-        <h1>Welcome to ScholarSpace</h1>
-        <p>Your ultimate study companion for collaborative learning.</p>
-        <Link to="/register">
-          <button className="cta-button">Get Started</button>
-        </Link>
-      </section>
+    <Box bg="gray.100" minH="100vh" py={10}>
+      <Container maxW="container.xl">
+        {/* Hero Section */}
+        <Box
+          bg="blue.600"
+          color="white"
+          py={16}
+          textAlign="center"
+          borderRadius="lg"
+          mb={10}
+        >
+          <Heading as="h1" size="2xl" mb={4}>
+            Welcome to ScholarSpace
+          </Heading>
+          <Text fontSize="lg" mb={6}>
+            Your ultimate study companion for collaborative learning.
+          </Text>
+          <Link to="/register">
+            <Button colorScheme="teal" size="lg">
+              Get Started
+            </Button>
+          </Link>
+        </Box>
 
-      <section className="features">
-        <h2>Key Features</h2>
-        <ul>
-          <li>
-            <h3>Collaborative Study Rooms</h3>
-            <p>
-              Join or create study rooms with peers to share notes and
-              resources.
-            </p>
-          </li>
-          <li>
-            <h3>Interactive Tools</h3>
-            <p>
-              Utilize tools for live discussions, Q&A, and sharing materials in
-              real-time.
-            </p>
-          </li>
-          <li>
-            <h3>Resource Library</h3>
-            <p>
-              Access a library of resources tailored for your classes and
-              subjects.
-            </p>
-          </li>
-        </ul>
-      </section>
+        {/* Features Section */}
+        <Box bg="white" p={8} boxShadow="lg" borderRadius="lg" mb={10}>
+          <Heading as="h2" size="xl" mb={6} textAlign="center">
+            Key Features
+          </Heading>
+          <Stack spacing={8}>
+            <FeatureItem
+              title="Collaborative Study Rooms"
+              description="Join or create study rooms with peers to share notes and resources."
+            />
+            <FeatureItem
+              title="Interactive Tools"
+              description="Utilize tools for live discussions, Q&A, and sharing materials in real-time."
+            />
+            <FeatureItem
+              title="Resource Library"
+              description="Access a library of resources tailored for your classes and subjects."
+            />
+          </Stack>
+        </Box>
 
-      <section className="how-it-works">
-        <h2>How It Works</h2>
-        <ol>
-          <li>Create an account to access all features.</li>
-          <li>Join or create a study room for your course.</li>
-          <li>Collaborate with classmates and ace your studies together!</li>
-        </ol>
-      </section>
+        {/* How It Works Section */}
+        <Box bg="white" p={8} boxShadow="lg" borderRadius="lg" mb={10}>
+          <Heading as="h2" size="xl" mb={6} textAlign="center">
+            How It Works
+          </Heading>
+          <Stack as="ol" spacing={4}>
+            <Text as="li" fontSize="lg">
+              Create an account to access all features.
+            </Text>
+            <Text as="li" fontSize="lg">
+              Join or create a study room for your course.
+            </Text>
+            <Text as="li" fontSize="lg">
+              Collaborate with classmates and ace your studies together!
+            </Text>
+          </Stack>
+        </Box>
 
-      <section className="testimonials">
-        <h2>What Our Users Say</h2>
-        <blockquote>
-          <p>
-            "ScholarSpace has transformed the way I study! Collaborating with my
-            peers has never been easier."
-          </p>
-          <footer>- Sarah L.</footer>
-        </blockquote>
-        <blockquote>
-          <p>
-            "The resource library is a lifesaver for finding study materials!"
-          </p>
-          <footer>- James T.</footer>
-        </blockquote>
-      </section>
+        {/* Testimonials Section */}
+        <Box bg="white" p={8} boxShadow="lg" borderRadius="lg" mb={10}>
+          <Heading as="h2" size="xl" mb={6} textAlign="center">
+            What Our Users Say
+          </Heading>
+          <Stack spacing={8} align="center">
+            <Testimonial
+              quote="ScholarSpace has transformed the way I study! Collaborating with my peers has never been easier."
+              author="Sarah L."
+            />
+            <Testimonial
+              quote="The resource library is a lifesaver for finding study materials!"
+              author="James T."
+            />
+          </Stack>
+        </Box>
 
-      <section className="cta">
-        <h2>Ready to Elevate Your Learning?</h2>
-        <Link to="/register">
-          <button className="cta-button">Join Now</button>
-        </Link>
-      </section>
-    </div>
+        {/* Call to Action Section */}
+        <Box
+          textAlign="center"
+          py={16}
+          bg="blue.600"
+          color="white"
+          borderRadius="lg"
+        >
+          <Heading as="h2" size="xl" mb={4}>
+            Ready to Elevate Your Learning?
+          </Heading>
+          <Link to="/register">
+            <Button colorScheme="teal" size="lg">
+              Join Now
+            </Button>
+          </Link>
+        </Box>
+      </Container>
+    </Box>
   );
 }
+
+// Reusable feature component
+const FeatureItem = ({ title, description }) => (
+  <Box>
+    <Heading as="h3" size="lg" mb={2}>
+      {title}
+    </Heading>
+    <Text fontSize="md" color="gray.600">
+      {description}
+    </Text>
+  </Box>
+);
+
+// Reusable testimonial component
+const Testimonial = ({ quote, author }) => (
+  <Box textAlign="center" p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
+    <Text fontSize="lg" fontStyle="italic" mb={4}>
+      "{quote}"
+    </Text>
+    <Text fontWeight="bold" fontSize="md">
+      - {author}
+    </Text>
+  </Box>
+);
 
 export default Home;

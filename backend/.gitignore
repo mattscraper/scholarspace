@@ -22,3 +22,25 @@ chat.db
 
 node_modules/
 /dist/
+
+
+
+# Python files
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+
+# Ignore local environment variables
+.env
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore database files
+*.sqlite3

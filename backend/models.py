@@ -1,4 +1,4 @@
-from app import bcrypt, db
+from app import  db
 
 
 
@@ -13,7 +13,7 @@ class Room(db.Model):
     name = db.Column(db.String(100), nullable = False)
     description = db.Column(db.Text, nullable = False)
     
-    users = db.relationship('User', secondary=user_room,backref='rooms')
+    users = db.relationship('User', secondary=user_room,back_populates='rooms')
     
 
     def to_json(self):
@@ -32,7 +32,7 @@ class User(db.Model):
     email = db.Column(db.String(80), unique= True, nullable=False)
     password = db.Column(db.String(200),nullable=False)
     
-   
+    rooms = db.relationship('Room', secondary= user_room,back_populates='users')
 
     def to_json(self):
         return {
