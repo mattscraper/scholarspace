@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Heading, Text, Grid, GridItem } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom"; // For navigation to room group chat
+import { RoomChat } from "../roomchat";
 
 export const ViewRooms = ({ userId }) => {
   const [rooms, setRooms] = useState([]);
@@ -34,8 +35,8 @@ export const ViewRooms = ({ userId }) => {
   };
 
   return (
-    <Box p={8} bg="gray.100" minH="100vh">
-      <Heading as="h1" size="xl" mb={6} textAlign="center">
+    <Box p={70} bg="gray.100" minH="100vh">
+      <Heading as="h1" size="xl" mb={10} textAlign="center">
         Your Rooms
       </Heading>
       {error && (
@@ -61,11 +62,14 @@ export const ViewRooms = ({ userId }) => {
               _hover={{ transform: "translateY(-10px)", cursor: "pointer" }}
               onClick={() => handleRoomClick(room.id)}
             >
-              <Heading as="h2" size="lg" mb={2}>
+              <Heading as="h2" size="lg" mb={5}>
                 {room.name}
               </Heading>
               <Text fontSize="md" color="gray.600">
                 {room.description}
+              </Text>
+              <Text fontSize="sm" color="gray.600" marginTop={4} padding={2}>
+                Room Id: {room.id}
               </Text>
             </GridItem>
           ))}

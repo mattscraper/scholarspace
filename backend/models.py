@@ -42,3 +42,24 @@ class User(db.Model):
             "password":self.password,
             "rooms":[room.to_json() for room in self.rooms]
         }
+    
+
+class Message(db.Model):
+    __tablename__ = 'message'
+
+    id = db.Column(db.Integer(),primary_key=True)
+    room_id = db.Column(db.Integer(),db.ForeignKey('room.id'),nullable =False)
+    user_id = db.Column(db.Integer(),db.ForeignKey('user.id'),nullable=False)
+    msg = db.Column(db.Text,nullable=False)
+
+    user = db.relationship('User', backref='messages')
+    room = db.relationship('Room',backref='messages')
+
+    def to_json(self):
+        return {
+            "id":self.id,
+            "room_id":self.room_id,
+            "user_id":self.user_id,
+            "msg":self.msg,
+            "username":self.user.username
+        }

@@ -1,7 +1,8 @@
-from app import app,db
+from app import app,db,bcrypt,socketio
 from flask import request, jsonify,session
-from models import Room,User,user_room
-from app import bcrypt
+from models import Room,User,user_room, Message
+from flask_socketio import join_room,leave_room,send
+
 
 
 
@@ -63,7 +64,8 @@ def get_user_from_db(email):
         return {
             'email':user.email,
             'password':user.password,
-            'userId':user.id
+            'userId':user.id,
+            "username":user.username
         }
     return None
         
@@ -82,12 +84,13 @@ def login():
     
     if user and bcrypt.check_password_hash(hashed_password,password):
         userId = user['userId']
-        return jsonify({"userId":userId}),200
+        username = user["username"]
+        return jsonify({"userId":userId,"username":username}),200
         
     
     else:
-        return jsonify({"error":"Please check username or password"}),401
-    
+         return jsonify({"error":"Please check username or password"}),401
+   
 @app.route('/api/register',methods=["POST"])
 def register_user():
     try:
@@ -95,6 +98,7 @@ def register_user():
         username = data.get("username")
         email = data.get("email")
         password = data.get("password")
+
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         print ("new user",username,email,hashed_password)
         new_user= User(username=username,email=email,password=hashed_password)
@@ -102,7 +106,7 @@ def register_user():
         db.session.commit()
 
         
-        return jsonify({"msg":"user created successfuly!"}),200
+        return jsonify({"userId":new_user.id,"msg":"user created successfuly!"}),200
 
 
 
@@ -143,7 +147,7 @@ def add_room():
     
 
 @app.route("/api/joinroom",methods=["POST"])
-def join_room():
+def join_room_route():
     data = request.json
     room_id= data.get("id")
     user_id = data.get("userId")
@@ -189,4 +193,53 @@ def view_rooms(user_id):
 
 
     
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    send(f"{username} has joined the room",to=room)
+
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send(f"{username} has left the room.",to=room)
+
+@socketio.on('message')
+def handle_message(data):
+    room_id = data['room']
+    username = data['username']
+    msg = data['msg']
+
+    room = Room.query.get(room_id)
+
+    if room is None:
+        return jsonify({
+            "error":"room does not exist"
+        })
+    
+    user = User.query.filter_by(username=username).first()
+    
+    if user:
+        new_message = Message(room_id = room.id, user_id = user.id, msg=msg)
+        db.session.add(new_message)
+        db.session.commit()
+    # Send message to the room with the username included
+    
+        socketio.emit('message', {'username': username, 'msg': msg}, room=room)
+
+
+@app.route('/api/rooms/<int:room_id>/messages', methods=['GET'])
+def get_room_messages(room_id):
+    try:
+
+        messages = Message.query.filter_by(room_id=room_id).all()
+        result = [message.to_json() for message in messages]
+        return jsonify(result),200
+    
+    except Exception as e:
+        return jsonify({"error":str(e)}),500
 

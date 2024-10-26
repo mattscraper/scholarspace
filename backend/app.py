@@ -3,9 +3,8 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room,leave_room,send
 from flask_migrate import Migrate
-
 
 
 app = Flask(__name__)
@@ -18,7 +17,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 socketio = SocketIO(app, cors_allowed_origins="*")
-from dbroutes import *
+from routes import *
 
 with app.app_context():
     db.create_all()

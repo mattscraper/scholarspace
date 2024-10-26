@@ -15,6 +15,7 @@ import { Register } from "./Pages/register";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { AddRoom } from "./Pages/addroom";
 import { ViewRooms } from "./Pages/viewrooms";
+import { RoomChat } from "./roomchat";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
               path="/addroom"
               element={<ProtectedRoute component={AddRoom} />}
             />{" "}
+            <Route
+              path="/room/:roomId/chat" // Add this route for chat rooms
+              element={<ProtectedRoute component={RoomChat} />}
+            />
             <Route path="/register" element={<Register />} />
             <Route path="about" element={<About />} />
           </Route>

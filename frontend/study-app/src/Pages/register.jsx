@@ -1,12 +1,25 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../AuthContext";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Text,
+  Heading,
+  Alert,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 
 export function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState("");
   const { login } = useAuth();
 
@@ -14,9 +27,9 @@ export function Register() {
     e.preventDefault();
 
     const userData = {
-      username: username,
-      email: email,
-      password: password,
+      username,
+      email,
+      password,
     };
 
     try {
@@ -26,8 +39,10 @@ export function Register() {
       );
       if (response.status === 200) {
         setMessage("User created successfully");
-        login();
-        window.location.href = "/login";
+
+        const { userId } = response.data;
+        login(userId);
+        window.location.href = "/viewrooms";
       }
     } catch (error) {
       setMessage(
@@ -36,61 +51,79 @@ export function Register() {
     }
   };
 
+  const handleClick = () => setShowPassword(!showPassword);
+
   return (
-    <div className="container">
-      <div className="screen">
-        <div className="screen__content">
-          <h2>Register</h2>
-          <form className="login" onSubmit={handleSubmit}>
-            <div className="login__field">
-              <i className="login__icon fas fa-user"></i>
-              <input
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      bgGradient="linear(to-r, teal.300, teal.500)"
+      padding={10}
+      borderRadius={10}
+    >
+      <Box
+        width="400px"
+        borderRadius="lg"
+        boxShadow="lg"
+        bg="white"
+        padding={10}
+      >
+        <Heading as="h2" size="lg" textAlign="center" marginBottom={4}>
+          Register
+        </Heading>
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={4}>
+            <FormControl isRequired>
+              <FormLabel>Username</FormLabel>
+              <Input
                 type="text"
-                className="login__input"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required
               />
-            </div>
-            <div className="login__field">
-              <i className="login__icon fas fa-envelope"></i>
-              <input
-                type="text"
-                className="login__input"
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <Input
+                type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
-            </div>
-            <div className="login__field">
-              <i className="login__icon fas fa-lock"></i>
-              <input
-                type="password"
-                className="login__input"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button className="login__submit" type="submit">
-              <span className="button__icon">
-                <i className="fas fa-arrow-right"></i>
-              </span>
-              <span>Register</span>
-            </button>
-          </form>
-          {message && <p>{message}</p>}
-        </div>
-        <div className="screen__background">
-          <span className="screen__background__shape screen__background__shape1"></span>
-          <span className="screen__background__shape screen__background__shape2"></span>
-          <span className="screen__background__shape screen__background__shape3"></span>
-          <span className="screen__background__shape screen__background__shape4"></span>
-        </div>
-      </div>
-    </div>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement width="4.5rem">
+                  <Button h="1.75rem" size="sm" onClick={handleClick}>
+                    {showPassword ? "Hide" : "Show"}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Button type="submit" colorScheme="teal" width="full" marginTop={4}>
+              Register
+            </Button>
+          </Stack>
+        </form>
+        {message && (
+          <Alert
+            status={message.includes("successfully") ? "success" : "error"}
+            marginTop={4}
+            borderRadius="md"
+          >
+            {message}
+          </Alert>
+        )}
+      </Box>
+    </Box>
   );
 }
